@@ -3,17 +3,33 @@ const router = require('express').Router();
 const User = require('../models/userSchema');
 
 router.get('/', (req, res) => {
-    return res.json({message: 'mainpage'});
+    console.log(req.isAuthenticated())
+    res.render('index', {user: req.user});
 });
 
 router.get('/login', (req, res) => {
-    return res.json({message: 'loginpage'});
+    res.render('login', {user: req.user});
 });
 
-router.post('/login', 
-    passport.authenticate('local', { failureRedirect: '/login' }),
-    function(req, res) {
-      res.redirect('/');
+router.post('/login',  passport.authenticate('local', 
+    { 
+        failureRedirect: '/login',
+        successRedirect: '/',
+    }),
+    (req, res) => {
+        res.redirect('/');
+    }
+);
+
+router.get('/logout', (req, res, next) => {
+    req.logout((user, err) => {
+        if(err) next(err);
+        res.redirect('/');
+    });
+});
+
+router.get('/singup', (req, res) => {
+    res.render('singup');
 });
 
 router.post('/singup', async (req, res) => {
@@ -21,7 +37,7 @@ router.post('/singup', async (req, res) => {
         const { username, password } = req.body;
         await User.create({username: username, password: password})
         .then((data) => {
-            res.json({message: data})
+            res.redirect('/login');
         });
     }
     catch(err) {

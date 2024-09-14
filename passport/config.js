@@ -7,7 +7,6 @@ mongoose.connect(`${process.env.DATABASE_URL}`).then((data) => {
     console.log('connected to db - ok');
 })
 .catch((err) => {
-    console.log(err);
     console.log('connected to db - err');
 })
 
@@ -21,8 +20,9 @@ passport.use(new LocalStrategy(
         await User.findOne({username: username})
         .then((user) => {
             try {
-                if (!user) { return done(null, false); }
-                if (!verifyPassword(user, password)) { return done(null, false); }
+                if (!user) return done(null, false);
+                if (!verifyPassword(user, password)) return done(null, false);
+
                 return done(null, user);
             }
             catch(err) {
@@ -32,14 +32,13 @@ passport.use(new LocalStrategy(
     }
 ));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
     done(null, user); 
 });
 
 passport.deserializeUser(async (user, done) => {
-    console.log(user._id)
     try {
-        await User.findOne({id: user._id})
+        await User.findOne({_id: user._id})
         .then((user) => {
             done(false, user);
         });
@@ -47,5 +46,4 @@ passport.deserializeUser(async (user, done) => {
     catch(err) {
         done(err, user);
     }
-    
 });
