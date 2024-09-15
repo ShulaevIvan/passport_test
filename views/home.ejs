@@ -1,11 +1,11 @@
 <section>
     <% if (!user) {%>
         <h1>Hello Guest</h1>
-        <p>please <a href="/singup">regiser</a> or <a href="/login">login</a></p>
+        <p>please <a href="/api/user/singup">regiser</a> or <a href="/api/user/login">login</a></p>
     <% } else if (user) { %>
         <div class="user-profile-wrap">
             <h1>Profile<%= user.username %></h1>
-            <p><a href="/logout">Logout</a></p>
+            <p><a href="/api/user/logout">Logout</a></p>
         </div>
     <% } %>
 </section>
