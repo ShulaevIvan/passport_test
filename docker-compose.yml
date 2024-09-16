@@ -1,0 +1,28 @@
+services:
+    psswd-mongo:
+        image: shulaevivan/psswd-mongo
+        hostname: psswd-mongo
+        working_dir: /app
+        ports:
+            - '3000:3000'
+        environment:
+            - PORT=3000
+            - HOST=localhost
+            - AUTH_SECRET='test'
+            - DATABASE_URL=mongodb://mongodbsrv:27017/users
+        depends_on:
+            - mongodb_server
+        networks:
+            - appnet
+        command: npm run start
+    mongodb_server:
+        image: mongodb/mongodb-community-server
+        hostname: mongodbsrv
+        ports:
+          - '27017:27017'
+        networks:
+          - appnet
+networks:
+    appnet:
+        name: appnet
+        driver: bridge

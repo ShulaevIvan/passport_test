@@ -3,7 +3,7 @@ const router = require('express').Router();
 const User = require('../models/userSchema');
 
 router.get('/login', (req, res) => {
-    res.render('login', {user: req.user});
+    return res.render('login', {user: req.user});
 });
 
 router.get('/logout', async (req, res, next) => {
@@ -23,7 +23,7 @@ router.get('/logout', async (req, res, next) => {
 router.get('/singup', async (req, res) => {
     try {
         res.status(200);
-        res.render('singup');
+        return res.render('singup');
     }
     catch(err) {
         console.log('err (GET) singup')
@@ -34,7 +34,9 @@ router.get('/singup', async (req, res) => {
 router.get('/me', async (req, res) => {
     try {
         if (req.user) {
-            res.render('userProfile', {user: req.user});
+            res.status(200);
+            return res.render('userProfile', {user: req.user});
+            
         }
         res.status(200);
         res.redirect('/api/user/login');

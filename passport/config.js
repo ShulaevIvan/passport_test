@@ -10,6 +10,8 @@ mongoose.connect(`${process.env.DATABASE_URL}`).then((data) => {
     console.log('connected to db - err');
 })
 
+
+
 const verifyPassword = (user, password) => {
     return user.password === password;
 };
